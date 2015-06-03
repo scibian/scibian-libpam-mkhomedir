@@ -1,0 +1,86 @@
+libpam-mkhomedir-calibre (2.5) calibre9; urgency=low
+
+  * Import to Calibre 9
+  * Update to debhelper 9
+
+ -- Florian Gillot <florian-externe.gillot@edf.fr>  Wed, 03 Jun 2015 11:49:12 +0200
+
+libpam-mkhomedir-calibre (2.4) calibre8; urgency=low
+
+  * Activation même pour les sessions non-interactives (Closes: #1780)
+
+ -- Gregoire Menuel <gregoire-externe.menuel@edf.fr>  Mon, 18 Aug 2014 16:45:13 +0200
+
+libpam-mkhomedir-calibre (2.3) calibre8; urgency=low
+
+  * Test l'existance de /local00 avant de créer /local00/home/$(basename
+    $HOME) (Closes: #1094) 
+
+ -- Gregoire Menuel <gregoire-externe.menuel@edf.fr>  Mon, 14 Jan 2013 16:31:51 +0100
+
+libpam-mkhomedir-calibre (2.2) calibre8; urgency=low
+
+  * N'essaie pas de créer le répertoire pour l'utilisateur nobody (uid 65534).
+    Cela corrige un bug introduit par le ticket #777 qui empêchait les
+    services utilisant "nobody" de fonctionner.
+
+ -- Grégoire Menuel <gregoire-externe.menuel@edf.fr>  Thu, 03 Jan 2013 17:54:09 +0100
+
+libpam-mkhomedir-calibre (2.1) calibre8; urgency=low
+
+  * Vérifie que /local00 est monté si /home est un lien symbolique vers
+    /local00 (#1077)
+
+ -- Gregoire Menuel <gregoire-externe.menuel@edf.fr>  Wed, 12 Dec 2012 13:28:52 +0100
+
+libpam-mkhomedir-calibre (2.0) calibre8; urgency=low
+
+  * Import Calibre 8
+  * Updated files to last code in pam 1.1.3
+
+ -- Ana Guerrero <ana-externe.guerrero@edf.fr>  Wed, 14 Nov 2012 16:17:50 +0100
+
+libpam-mkhomedir-calibre (1.3) calibre7; urgency=low
+
+  * Mise à jour des uploaders
+  * Utilisation de basename(homeDir) comme suffixe pour les dossiers à la
+    place du login (Closes: #1017)
+
+ -- Gregoire Menuel <gregoire-externe.menuel@edf.fr>  Thu, 04 Oct 2012 15:19:39 +0200
+
+libpam-mkhomedir-calibre (1.2) calibre7; urgency=low
+
+  * Allow also /users/$user when /users is a symlink to /local/home.
+  * Small bugfix.
+
+ -- Ana Guerrero <ana-externe.guerrero@edf.fr>  Thu, 19 Jan 2012 17:16:22 +0100
+
+libpam-mkhomedir-calibre (1.1) calibre7; urgency=low
+
+  * Limitation de la creation du HOMEDIR si $HOME=/home (Closes: #777) 
+
+ -- Matthieu Laperrousaz <matthieu.laperrousaz@edf.fr>  Fri, 04 Nov 2011 11:00:07 +0100
+
+libpam-mkhomedir-calibre (1.0) calibre7; urgency=low
+
+  * Suppression de la remise des droits sur /scratch (Closes: #707) 
+
+ -- Matthieu Laperrousaz <matthieu.laperrousaz@edf.fr>  Mon, 25 Jul 2011 10:28:42 +0200
+
+libpam-mkhomedir-calibre (1.0~beta2) calibre7; urgency=low
+
+  * Test sur uid < 1000 au lieu de username=root 
+
+ -- Matthieu Laperrousaz <matthieu.laperrousaz@edf.fr>  Tue, 22 Jun 2010 17:51:54 +0200
+
+libpam-mkhomedir-calibre (1.0~beta1) calibre7; urgency=low
+
+  * Initial release (Closes: #330)
+  * Difference par rapport au module pam_mkhomedir originel :
+    + creation de /local00/home/$USERNAME
+    + si /local01 -> creation de /local01/home/$USERNAME
+    + si /scratch -> creation de /scratch/$USERNAME
+    + variable d'environnement LOCALDIR=/local00/$USERNAME
+    + si /scratch, variable d'environnement SCRATCHDIR=/scratch/$USERNAME
+
+ -- Matthieu Laperrousaz <matthieu.laperrousaz@edf.fr>  Tue, 15 Jun 2010 13:20:05 +0200

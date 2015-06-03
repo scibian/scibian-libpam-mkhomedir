@@ -1,0 +1,6 @@
+Name: Make home directory for user
+Default: yes
+Priority: 192
+Session-Type: Additional
+Session:
+	required			pam_mkhomedir_calibre.so skel=/etc/skel/ umask=0077

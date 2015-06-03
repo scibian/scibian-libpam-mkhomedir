@@ -1,0 +1,14 @@
+Ce paquet est une modification du module pam_mkhomedir de pam 1.1.3
+ - pam-1.1.3/modules/pam_mkhomedir/mkhomedir_helper.c
+ - pam-1.1.3/modules/pam_mkhomedir/pam_mkhomedir.c
+
+Les modifications ont ete effectuees suite au ticket #330 
+
+---------------
+De plus, il nous faut une solution, créer les répertoires nécessaires à la connexion :
+
+/local00/home/$user
+/local01/home/$user (si /local01 existe)
+/scratch/$user (si /scratch existe)
+Positionnement de l’environnement pour faciliter le développement de scripts : $SCRATCHDIR=/scratch/$user, $LOCALDIR=/local00/home/$user
+----------------

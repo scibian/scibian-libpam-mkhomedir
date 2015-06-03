@@ -1,0 +1,14 @@
+Source: libpam-mkhomedir-calibre
+Section: edf
+Priority: optional
+Maintainer: TMI Calibre <tmi-calibre@edf.fr>
+Build-Depends: debhelper (>= 9), libpam0g-dev
+Standards-Version: 3.9.6
+
+Package: libpam-mkhomedir-calibre
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Architecture: any
+Description: Module PAM de creation de repertoires Calibre
+ Module PAM pour la creation automatique des repertoires
+ /local00/$user, /local01/$user et /scratch/$user, ainsi
+ que le parametrage des variables LOCALDIR et SCRATCHDIR
