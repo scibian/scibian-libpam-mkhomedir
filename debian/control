@@ -1,0 +1,21 @@
+Source: libpam-mkhomedir-hpc
+Priority: optional
+Maintainer: Rémi Palancher <remi-externe.palancher@edf.fr>
+Build-Depends:
+ debhelper (>= 8)
+Standards-Version: 3.9.3
+Section: admin
+Vcs-Browser: https://github.com/edf-hpc/libpam-mkhomedir-hpc
+Vcs-Git: https://github.com/edf-hpc/libpam-mkhomedir-hpc.git
+
+Package: libpam-mkhomedir-hpc
+Architecture: all
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ libpam-runtime,
+ libpam-python,
+ acl
+Description: PAM module to create user directories on HPC clusters
+ This package provides a PAM module that dynamically creates users directories
+ (home, scratch) with restricted rights using ACL if available.

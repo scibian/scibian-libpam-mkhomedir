@@ -1,0 +1,5 @@
+libpam-mkhomedir-hpc (0.1) calibre9; urgency=low
+
+  * Initial release
+
+ -- Rémi Palancher <remi-externe.palancher@edf.fr>  Mon, 24 Apr 2017 10:47:11 +0100
