@@ -26,13 +26,10 @@
 
 import ConfigParser
 import pwd
-from pwd import getpwnam
-import grp
 import os
 from os.path import exists
-import sys
-import syslog
 import shutil
+import syslog
 
 # Read configuration from /etc/pam_mkhomedir.ini
 config = ConfigParser.ConfigParser()
@@ -45,67 +42,72 @@ debug_level = config.get("config", "debug_level")
 acl = config.get("config", "acl")
 
 syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
+
 if debug_level == "error":
     syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_ERR))
 if debug_level == "debug":
     syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_DEBUG))
-else: # info or something wrong
+else:  # info or something wrong
     syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
+
 
 def debug(msg):
     syslog.syslog(syslog.LOG_DEBUG, msg)
 
+
 def error(msg):
     syslog.syslog(syslog.LOG_ERR, msg)
+
 
 def info(msg):
     syslog.syslog(syslog.LOG_INFO, msg)
 
+
 def create_user_dir(pamh, basedir, user, skel=False):
-  # Some user might have a personal directory that has not the same
-  # name as their username, we use the last directory of the
-  # homedir entry ('/home/toto' -> 'toto')
-  userdir_basename = os.path.basename(pwd.getpwnam(user).pw_dir)
-  userdir = os.path.join(basedir, userdir_basename)
-  uid = pwd.getpwnam(user).pw_uid
-  maingid = pwd.getpwnam(user).pw_gid
+    # Some user might have a personal directory that has not the same
+    # name as their username, we use the last directory of the
+    # homedir entry ('/home/toto' -> 'toto')
+    userdir_basename = os.path.basename(pwd.getpwnam(user).pw_dir)
+    userdir = os.path.join(basedir, userdir_basename)
+    uid = pwd.getpwnam(user).pw_uid
+    maingid = pwd.getpwnam(user).pw_gid
 
+    if exists(userdir):
+        if not os.path.isdir(userdir):
+            info("%s is not a dir, fixing it" % (userdir))
+            debug("-> unlink %s" % userdir)
+            os.unlink(userdir)
+            debug("<- unlink %s" % userdir)
+        elif acl:
+            if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                error("Setting ACLs for user %s on %s failed!" % (user, userdir))
 
-  if exists(userdir):
-    if not os.path.isdir(userdir):
-      info("%s is not a dir, fixing it" % (userdir))
-      debug ("-> unlink %s" % userdir)
-      os.unlink(userdir)
-      debug ("<- unlink %s" % userdir)
-    elif acl:
-      if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-        error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+    if not exists(userdir):
+        info("Creating %s" % basedir)
+        if skel:
+            # Create user tree by copying content of /etc/skel
+            debug("-> shutil.copytree %s" % userdir)
+            shutil.copytree(skel_dir + "/.", userdir, True)
+            debug("<- shutil.copytree %s" % userdir)
+        else:
+            debug("-> mkdir %s" % userdir)
+            os.mkdir(userdir)
+            debug("<- mkdir %s" % userdir)
 
-  if not exists(userdir):
-    info("Creating %s" % basedir)
-    if skel:
-        # Create user tree by copying content of /etc/skel
-        debug ("-> shutil.copytree %s" % userdir)
-        shutil.copytree(skel_dir + "/.", userdir, True)
-        debug ("<- shutil.copytree %s" % userdir)
-    else:
-        debug ("-> mkdir %s" % userdir)
-        os.mkdir(userdir)
-        debug ("<- mkdir %s" % userdir)
-    debug ("-> recursive chown %s" % userdir)
-    for root, dirs, files in os.walk(userdir):
-        for d in dirs:
-            os.chown(os.path.join(root, d), uid, maingid)
-        for f in files:
-            os.chown(os.path.join(root, f), uid, maingid)
-    debug ("<- recursive chown %s" % userdir)
+        debug("-> recursive chown %s" % userdir)
+        for root, dirs, files in os.walk(userdir):
+            for d in dirs:
+                os.chown(os.path.join(root, d), uid, maingid)
+            for f in files:
+                os.chown(os.path.join(root, f), uid, maingid)
+        debug("<- recursive chown %s" % userdir)
 
     if acl:
         # Userdir
-        debug ("-> userdir chmod %s" % userdir)
+        debug("-> userdir chmod %s" % userdir)
         os.chown(userdir, 0, 0)
         os.chmod(userdir, 0700)
-        debug ("<- userdir chmod %s" % userdir)
+        debug("<- userdir chmod %s" % userdir)
         # Set ACL on user's dir
         info("Setting up ACL for %s" % userdir)
         if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
@@ -114,45 +116,51 @@ def create_user_dir(pamh, basedir, user, skel=False):
         # give new dir to user (recursive chown does not include the userdir)
         os.chown(userdir, uid, maingid)
 
+
 def pam_sm_authenticate(pamh, flags, argv):
-  return pamh.PAM_SUCCESS
+    return pamh.PAM_SUCCESS
+
 
 def pam_sm_setcred(pamh, flags, argv):
-  return pamh.PAM_SUCCESS
+    return pamh.PAM_SUCCESS
+
 
 def pam_sm_acct_mgmt(pamh, flags, argv):
-  return pamh.PAM_SUCCESS
+    return pamh.PAM_SUCCESS
+
 
 def pam_sm_open_session(pamh, flags, argv):
 
-  try:
-    user = pamh.get_user(None)
-  except pamh.exception, e:
-    return e.pam_result
+    try:
+        user = pamh.get_user(None)
+    except pamh.exception, e:
+        return e.pam_result
 
-  skel_dirs = [ d.replace("skel=", "") for d in argv if d.startswith("skel=") ]
-  if skel_dirs:
-    skel_dir = skel_dirs[0]
+    skel_dirs = [d.replace("skel=", "") for d in argv if d.startswith("skel=")]
+    if skel_dirs:
+        skel_dir = skel_dirs[0]
 
-  # Ignore users with uid < 1000
-  minimum_uid = 1000
-  if pwd.getpwnam(user).pw_uid < minimum_uid:
-    return pamh.PAM_SUCCESS
+    # Ignore users with uid < 1000
+    minimum_uid = 1000
+    if pwd.getpwnam(user).pw_uid < minimum_uid:
+        return pamh.PAM_SUCCESS
 
-  try:
-    create_user_dir(pamh, home_dir, user, skel=True)
-    create_user_dir(pamh, scratch_dir, user, skel=False)
+    try:
+        create_user_dir(pamh, home_dir, user, skel=True)
+        create_user_dir(pamh, scratch_dir, user, skel=False)
 
-    pamh.env['SCRATCHDIR'] = os.path.join(scratch_dir, user)
+        pamh.env['SCRATCHDIR'] = os.path.join(scratch_dir, user)
 
-    return pamh.PAM_SUCCESS
+        return pamh.PAM_SUCCESS
 
-  except Exception as inst:
-    error(inst.__str__())
-    return pamh.PAM_AUTH_ERR
+    except Exception as inst:
+        error(inst.__str__())
+        return pamh.PAM_AUTH_ERR
+
 
 def pam_sm_close_session(pamh, flags, argv):
-  return pamh.PAM_SUCCESS
+    return pamh.PAM_SUCCESS
+
 
 def pam_sm_chauthtok(pamh, flags, argv):
-  return pamh.PAM_SUCCESS
+    return pamh.PAM_SUCCESS
