@@ -41,12 +41,25 @@ config.read("/etc/pam_mkhomedir.ini")
 home_dir = config.get("config", "home_dir")
 scratch_dir = config.get("config", "scratch_dir")
 skel_dir = config.get("config", "skel_dir")
-debug_mode = config.get("config", "debug_mode")
+debug_level = config.get("config", "debug_level")
 acl = config.get("config", "acl")
 
-def debug(fmt, *args):
-  if debug_mode:
-    syslog.syslog(fmt % args)
+syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
+if debug_level == "error":
+    syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_ERR))
+if debug_level == "debug":
+    syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_DEBUG))
+else: # info or something wrong
+    syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
+
+def debug(msg):
+    syslog.syslog(syslog.LOG_DEBUG, msg)
+
+def error(msg):
+    syslog.syslog(syslog.LOG_ERR, msg)
+
+def info(msg):
+    syslog.syslog(syslog.LOG_INFO, msg)
 
 def create_user_dir(pamh, basedir, user, skel=False):
   # Some user might have a personal directory that has not the same
@@ -60,14 +73,16 @@ def create_user_dir(pamh, basedir, user, skel=False):
 
   if exists(userdir):
     if not os.path.isdir(userdir):
+      info("%s is not a dir, fixing it" % (userdir))
       debug ("-> unlink %s" % userdir)
       os.unlink(userdir)
       debug ("<- unlink %s" % userdir)
     elif acl:
       if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-        syslog.syslog("Setting ACLs for user %s on %s failed!" % (user, userdir))
+        error("Setting ACLs for user %s on %s failed!" % (user, userdir))
 
   if not exists(userdir):
+    info("Creating %s" % basedir)
     if skel:
         # Create user tree by copying content of /etc/skel
         debug ("-> shutil.copytree %s" % userdir)
@@ -92,8 +107,9 @@ def create_user_dir(pamh, basedir, user, skel=False):
         os.chmod(userdir, 0700)
         debug ("<- userdir chmod %s" % userdir)
         # Set ACL on user's dir
+        info("Setting up ACL for %s" % userdir)
         if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-            syslog.syslog("Setting ACLs for user %s on %s failed!" % (user, userdir))
+            error("Setting ACLs for user %s on %s failed!" % (user, userdir))
     else:
         # give new dir to user (recursive chown does not include the userdir)
         os.chown(userdir, uid, maingid)
@@ -109,7 +125,6 @@ def pam_sm_acct_mgmt(pamh, flags, argv):
 
 def pam_sm_open_session(pamh, flags, argv):
 
-  syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
   try:
     user = pamh.get_user(None)
   except pamh.exception, e:
@@ -133,7 +148,7 @@ def pam_sm_open_session(pamh, flags, argv):
     return pamh.PAM_SUCCESS
 
   except Exception as inst:
-    syslog.syslog(inst.__str__())
+    error(inst.__str__())
     return pamh.PAM_AUTH_ERR
 
 def pam_sm_close_session(pamh, flags, argv):
