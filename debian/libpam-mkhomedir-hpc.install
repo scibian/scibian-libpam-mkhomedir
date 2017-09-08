@@ -1,1 +1,2 @@
 *.py usr/share/pam
+*.ini etc

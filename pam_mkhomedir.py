@@ -24,6 +24,7 @@
 # Usage:
 #   login session   requisite   pam_python.so pam_mkhomedir.py
 
+import ConfigParser
 import pwd
 from pwd import getpwnam
 import grp
@@ -33,12 +34,15 @@ import sys
 import syslog
 import shutil
 
-home_dir = "/home"
-scratch_dir = "/scratch"
+# Read configuration from /etc/pam_mkhomedir.ini
+config = ConfigParser.ConfigParser()
+config.read("/etc/pam_mkhomedir.ini")
 
-debug_mode = False
-acl = True
-skel_dir = '/etc/skel'
+home_dir = config.get("config", "home_dir")
+scratch_dir = config.get("config", "scratch_dir")
+skel_dir = config.get("config", "skel_dir")
+debug_mode = config.get("config", "debug_mode")
+acl = config.get("config", "acl")
 
 def debug(fmt, *args):
   if debug_mode:
@@ -80,6 +84,7 @@ def create_user_dir(pamh, basedir, user, skel=False):
         for f in files:
             os.chown(os.path.join(root, f), uid, maingid)
     debug ("<- recursive chown %s" % userdir)
+
     if acl:
         # Userdir
         debug ("-> userdir chmod %s" % userdir)
@@ -103,18 +108,12 @@ def pam_sm_acct_mgmt(pamh, flags, argv):
   return pamh.PAM_SUCCESS
 
 def pam_sm_open_session(pamh, flags, argv):
-  global debug_mode, acl, skel_dir
 
   syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
   try:
     user = pamh.get_user(None)
   except pamh.exception, e:
     return e.pam_result
-
-  if "debug" in argv:
-    debug_mode = True
-  if "noacl" in argv:
-    acl = False
 
   skel_dirs = [ d.replace("skel=", "") for d in argv if d.startswith("skel=") ]
   if skel_dirs:
