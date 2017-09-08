@@ -8,4 +8,4 @@ override_dh_auto_install:
 	dh_auto_install
 	# PAM config
 	# installed here manually because dh_install is not able to rename files
-	install -D -m 644 -p debian/libpam-mkhomedir-hpc.pam-auth-update debian/libpam-mkhomedir-hpc/usr/share/pam-configs/mkhomedir-hpc
+	install -D -m 644 -p debian/libpam-mkhomedir-scibian.pam-auth-update debian/libpam-mkhomedir-scibian/usr/share/pam-configs/mkhomedir-scibian

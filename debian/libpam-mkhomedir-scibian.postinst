@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for libpam-mkhomedir-hpc
+# postinst script for libpam-mkhomedir-scibian
 #
 # see: dh_installdeb(1)
 

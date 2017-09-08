@@ -1,7 +1,9 @@
-libpam-mkhomedir-hpc (0.2) UNRELEASED; urgency=medium
+libpam-mkhomedir-scibian (0.2) UNRELEASED; urgency=medium
 
+  * Rename to libpam-mkhomedir-scibian.
   * Handle configuration options in a file pam_mkhomedir.ini
   * Modify syslog functions to set priority levels for the messages.
+  * Use debcompat 9.
 
  -- Ana Guerrero <ana-externe.guerrero@edf.fr>  Fri, 08 Sep 2017 11:23:25 +0000
 
