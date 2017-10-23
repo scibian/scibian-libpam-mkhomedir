@@ -45,7 +45,7 @@ syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
 
 if debug_level == "error":
     syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_ERR))
-if debug_level == "debug":
+elif debug_level == "debug":
     syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_DEBUG))
 else:  # info or something wrong
     syslog.setlogmask(syslog.LOG_UPTO(syslog.LOG_INFO))
