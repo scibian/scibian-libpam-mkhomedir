@@ -147,10 +147,12 @@ def pam_sm_open_session(pamh, flags, argv):
         return pamh.PAM_SUCCESS
 
     try:
-        create_user_dir(pamh, home_dir, user, skel=True)
-        create_user_dir(pamh, scratch_dir, user, skel=False)
+        if home_dir is not "":
+            create_user_dir(pamh, home_dir, user, skel)
 
-        pamh.env['SCRATCHDIR'] = os.path.join(scratch_dir, user)
+        if scratch_dir is not "":
+            create_user_dir(pamh, scratch_dir, user, False)
+            pamh.env['SCRATCHDIR'] = os.path.join(scratch_dir, user)
 
         return pamh.PAM_SUCCESS
 
