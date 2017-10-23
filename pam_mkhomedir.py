@@ -136,9 +136,10 @@ def pam_sm_open_session(pamh, flags, argv):
     except pamh.exception, e:
         return e.pam_result
 
-    skel_dirs = [d.replace("skel=", "") for d in argv if d.startswith("skel=")]
-    if skel_dirs:
-        skel_dir = skel_dirs[0]
+    if skel_dir is "":
+       skel = False
+    else:
+       skel = True
 
     # Ignore users with uid < 1000
     minimum_uid = 1000
