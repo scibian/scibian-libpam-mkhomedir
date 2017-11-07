@@ -1,3 +1,9 @@
+libpam-mkhomedir-scibian (0.3) calibre9; urgency=medium
+
+  * Add Breaks/Replaces on libpam-mkhomedir-hpc.
+
+ -- Ana Guerrero <ana-externe.guerrero@edf.fr>  Tue, 07 Nov 2017 16:41:54 +0100
+
 libpam-mkhomedir-scibian (0.2) calibre9; urgency=medium
 
   * Rename to libpam-mkhomedir-scibian.

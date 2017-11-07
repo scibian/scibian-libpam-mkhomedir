@@ -16,6 +16,8 @@ Depends:
  libpam-runtime,
  libpam-python,
  acl
+Replaces: libpam-mkhomedir-hpc
+Breaks: libpam-mkhomedir-hpc
 Description: PAM module to create user directories on HPC clusters
  This package provides a PAM module that dynamically creates users directories
  (home, scratch) with restricted rights using ACL if available.
