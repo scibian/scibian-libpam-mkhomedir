@@ -39,7 +39,7 @@ home_dir = config.get("config", "home_dir")
 scratch_dir = config.get("config", "scratch_dir")
 skel_dir = config.get("config", "skel_dir")
 debug_level = config.get("config", "debug_level")
-acl = config.get("config", "acl")
+acl = config.getboolean("config", "acl")
 
 syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
 

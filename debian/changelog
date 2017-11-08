@@ -1,3 +1,9 @@
+libpam-mkhomedir-scibian (0.4) calibre9; urgency=medium
+
+  * Bugfix: use getboolean to read the value of acl.
+
+ -- Ana Guerrero <ana-externe.guerrero@edf.fr>  Wed, 08 Nov 2017 17:16:27 +0100
+
 libpam-mkhomedir-scibian (0.3) calibre9; urgency=medium
 
   * Add Breaks/Replaces on libpam-mkhomedir-hpc.
