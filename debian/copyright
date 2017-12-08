@@ -2,7 +2,7 @@ Packaged-By: Rémi Palancher <remi-externe.palancher@edf.fr>
 Packaged-Date: Mon, 24 Apr 2017 10:42:11 +0100
 
 Files: *
-Copyright: © 2017 EDF S.A.
+Copyright: © 2017 Scibian Project <legal@scibian.org>
 License: GPLv3+
  This software and the debian packaging are provided under the GPL version 3 or
  later, see `/usr/share/common-licenses/GPL-3'.

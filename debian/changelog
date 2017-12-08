@@ -1,4 +1,4 @@
-libpam-mkhomedir-scibian (0.4) calibre9; urgency=medium
+scibian-libpam-mkhomedir (0.4) scibian8; urgency=medium
 
   * Bugfix: use getboolean to read the value of acl.
 

@@ -1,12 +1,12 @@
-Source: libpam-mkhomedir-scibian
+Source: scibian-libpam-mkhomedir
 Priority: optional
 Maintainer: Rémi Palancher <remi-externe.palancher@edf.fr>
 Build-Depends:
  debhelper (>= 9)
 Standards-Version: 3.9.3
 Section: admin
-Vcs-Browser: https://github.com/edf-hpc/libpam-mkhomedir-scibian
-Vcs-Git: https://github.com/edf-hpc/libpam-mkhomedir-scibian.git
+Vcs-Browser: https://github.com/scibian/scibian-libpam-mkhomedir
+Vcs-Git: https://github.com/scibian/scibian-libpam-mkhomedir.git
 
 Package: libpam-mkhomedir-scibian
 Architecture: all
