@@ -16,7 +16,8 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with slurm-web.  If not, see <http://www.gnu.org/licenses/>.
+# along with scibian-libpam-mkhomedir.  If not, see
+# <http://www.gnu.org/licenses/>.
 #
 # pam_mkhomedir.py: creates homedir of being logged in users and takes
 # care of creating outer containers and setting up appropriate rights.
