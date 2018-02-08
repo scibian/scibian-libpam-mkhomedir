@@ -102,20 +102,19 @@ def create_user_dir(pamh, basedir, user, skel=False):
             for f in files:
                 os.chown(os.path.join(root, f), uid, maingid)
         debug("<- recursive chown %s" % userdir)
-
-    if acl:
-        # Userdir
-        debug("-> userdir chmod %s" % userdir)
-        os.chown(userdir, 0, 0)
-        os.chmod(userdir, 0700)
-        debug("<- userdir chmod %s" % userdir)
-        # Set ACL on user's dir
-        info("Setting up ACL for %s" % userdir)
-        if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-            error("Setting ACLs for user %s on %s failed!" % (user, userdir))
-    else:
-        # give new dir to user (recursive chown does not include the userdir)
-        os.chown(userdir, uid, maingid)
+        if acl:
+            # Userdir
+            debug("-> userdir chmod %s" % userdir)
+            os.chown(userdir, 0, 0)
+            os.chmod(userdir, 0700)
+            debug("<- userdir chmod %s" % userdir)
+            # Set ACL on user's dir
+            info("Setting up ACL for %s" % userdir)
+            if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+        else:
+            # give new dir to user (recursive chown does not include the userdir)
+            os.chown(userdir, uid, maingid)
 
 
 def pam_sm_authenticate(pamh, flags, argv):
