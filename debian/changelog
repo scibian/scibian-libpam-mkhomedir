@@ -1,3 +1,9 @@
+scibian-libpam-mkhomedir (0.5) scibian8; urgency=medium
+
+  * Bugfix: Change owner and mode of userdir only if it does not exists.
+
+ -- Benoit Boccard <benoit-externe.boccard@edf.fr>  Thu, 08 Feb 2018 16:00:27 +0100
+
 scibian-libpam-mkhomedir (0.4) scibian8; urgency=medium
 
   * Bugfix: use getboolean to read the value of acl.
