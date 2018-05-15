@@ -1,3 +1,10 @@
+scibian-libpam-mkhomedir (0.5sci9) scibian9; urgency=medium
+
+  * Rebuild for Scibian 9.
+  * Fix maintainer
+
+ -- Rémi Palancher <remi-externe.palancher@edf.fr>  Tue, 15 May 2018 11:34:30 +0200
+
 scibian-libpam-mkhomedir (0.5) scibian8; urgency=medium
 
   * Bugfix: Change owner and mode of userdir only if it does not exists.
