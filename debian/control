@@ -1,6 +1,6 @@
 Source: scibian-libpam-mkhomedir
 Priority: optional
-Maintainer: Rémi Palancher <remi-externe.palancher@edf.fr>
+Maintainer: Scibian Project <packaging@scibian.org>
 Build-Depends:
  debhelper (>= 9)
 Standards-Version: 3.9.3
