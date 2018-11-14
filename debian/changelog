@@ -1,3 +1,9 @@
+scibian-libpam-mkhomedir (10.0sci1) UNRELEASED; urgency=medium
+
+  * Create /local01/home/user directory if necessary
+
+ -- Mehdi Dogguy <mehdi.dogguy@edf.fr>  Wed, 14 Nov 2018 11:08:28 +0100
+
 scibian-libpam-mkhomedir (0.5sci9) scibian9; urgency=medium
 
   * Rebuild for Scibian 9.

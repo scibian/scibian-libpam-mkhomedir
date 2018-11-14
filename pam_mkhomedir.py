@@ -41,6 +41,7 @@ scratch_dir = config.get("config", "scratch_dir")
 skel_dir = config.get("config", "skel_dir")
 debug_level = config.get("config", "debug_level")
 acl = config.getboolean("config", "acl")
+nfs4_acl = config.getboolean("config", "nfs4_acl")
 
 syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
 
@@ -80,8 +81,12 @@ def create_user_dir(pamh, basedir, user, skel=False):
             os.unlink(userdir)
             debug("<- unlink %s" % userdir)
         elif acl:
-            if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-                error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+            if nfs4_acl:
+                if os.system("nfs4_setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                    error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+            else:
+                if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                    error("Setting ACLs for user %s on %s failed!" % (user, userdir))
 
     if not exists(userdir):
         info("Creating %s" % basedir)
