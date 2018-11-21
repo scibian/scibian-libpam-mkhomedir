@@ -1,3 +1,9 @@
+scibian-libpam-mkhomedir (10.0sci4) scibian9; urgency=medium
+
+  * Add an explanation for scratch_dir in pam_mkhomedir.ini
+
+ -- Mehdi Dogguy <mehdi.dogguy@edf.fr>  Wed, 21 Nov 2018 14:00:33 +0100
+
 scibian-libpam-mkhomedir (10.0sci3) scibian9; urgency=medium
 
   * Check existence of scratch_dir before proceeding with user directory creation
