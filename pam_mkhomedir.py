@@ -153,7 +153,7 @@ def pam_sm_open_session(pamh, flags, argv):
         if exists("/local01/home"):
             create_user_dir(pamh, "/local01/home", user, False)
 
-        if scratch_dir is not "":
+        if scratch_dir is not "" and exists(scratch_dir):
             create_user_dir(pamh, scratch_dir, user, False)
             pamh.env['SCRATCHDIR'] = os.path.join(scratch_dir, user)
 
