@@ -84,7 +84,7 @@ def create_user_dir(pamh, basedir, user, skel=False):
                 error("Setting ACLs for user %s on %s failed!" % (user, userdir))
 
     if not exists(userdir):
-        info("Creating %s" % basedir)
+        info("Creating %s" % userdir)
         if skel:
             # Create user tree by copying content of /etc/skel
             debug("-> shutil.copytree %s" % userdir)
