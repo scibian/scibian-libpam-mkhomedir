@@ -31,9 +31,20 @@ import os
 from os.path import exists
 import shutil
 import syslog
+import io
+
+default_config="""
+[config]
+home_dir=/home
+scratch_dir=
+skel_dir=/etc/skel
+debug_level=info
+acl=True
+"""
 
 # Read configuration from /etc/pam_mkhomedir.ini
 config = ConfigParser.ConfigParser()
+config.readfp(io.BytesIO(default_config))
 config.read("/etc/pam_mkhomedir.ini")
 
 home_dir = config.get("config", "home_dir")
