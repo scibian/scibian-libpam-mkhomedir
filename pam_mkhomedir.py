@@ -31,6 +31,7 @@ import os
 from os.path import exists
 import shutil
 import syslog
+import sys
 import io
 
 default_config="""
@@ -40,6 +41,7 @@ scratch_dir=
 skel_dir=/etc/skel
 debug_level=info
 acl=True
+acl_type=posix
 """
 
 # Read configuration from /etc/pam_mkhomedir.ini
@@ -52,6 +54,30 @@ scratch_dir = config.get("config", "scratch_dir")
 skel_dir = config.get("config", "skel_dir")
 debug_level = config.get("config", "debug_level")
 acl = config.getboolean("config", "acl")
+acl_type = config.get("config", "acl_type")
+if acl_type not in ['posix', 'nfs4']:
+    error("Unsupported ACL type '%s'" % (acl_type))
+    sys.exit(pamh.PAM_AUTH_ERR)
+if acl_type == 'nfs4':
+    try:
+        acl_nfs4_domain = config.get("config", "acl_nfs4_domain")
+    except ConfigParser.NoOptionError:
+        error("Parameter acl_nfs4_domain must be defined in configuration with ACL type nfs4")
+        sys.exit(pamh.PAM_AUTH_ERR)
+else:
+    acl_nfs4_domain = None
+
+# NFS4 ACL permissions set on home/scratch directories, when acl_type is nfs4.
+#
+# Compared to the full permissions list, it misses:
+#   - d: delete the directory
+#   - T: write the attributes on the directory
+#   - N: write the named attributes on the directory
+#   - C: write the directory ACL
+#   - o: change ownership of the directory
+#
+# RWX aliases are not used since because W gives TNC.
+acl_nfs4_perms = 'rwaxDtncy'
 
 syslog.openlog("pam_mkhomedir", syslog.LOG_PID, syslog.LOG_AUTH)
 
@@ -91,8 +117,12 @@ def create_user_dir(pamh, basedir, user, skel=False):
             os.unlink(userdir)
             debug("<- unlink %s" % userdir)
         elif acl:
-            if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-                error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+            if acl_type == 'posix':
+                if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                    error("Setting POSIX ACLs for user %s on %s failed!" % (user, userdir))
+            elif acl_type == 'nfs4':
+                if os.system("nfs4_setfacl -s A::%s@%s:%s %s" % (user, acl_nfs4_domain, acl_nfs4_perms, userdir)) != 0:
+                    error("Setting NFS4 ACLs for user %s on %s failed!" % (user, userdir))
 
     if not exists(userdir):
         info("Creating %s" % userdir)
@@ -120,9 +150,14 @@ def create_user_dir(pamh, basedir, user, skel=False):
             os.chmod(userdir, 0700)
             debug("<- userdir chmod %s" % userdir)
             # Set ACL on user's dir
-            info("Setting up ACL for %s" % userdir)
-            if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-                error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+            if acl_type == 'posix':
+                info("Setting up POSIX ACL for %s" % userdir)
+                if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                    error("Setting ACLs for user %s on %s failed!" % (user, userdir))
+            elif acl_type == 'nfs4':
+                info("Setting up NFS4 ACL for %s" % userdir)
+                if os.system("nfs4_setfacl -s A::%s@%s:%s %s" % (user, acl_nfs4_domain, acl_nfs4_perms, userdir)) != 0:
+                    error("Setting NFS4 ACLs for user %s on %s failed!" % (user, userdir))
         else:
             # give new dir to user (recursive chown does not include the userdir)
             os.chown(userdir, uid, maingid)
