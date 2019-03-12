@@ -2,8 +2,8 @@ Source: libpam-mkhomedir-scibian
 Section: scibian/edf
 Priority: optional
 Maintainer: Scibian Packaging Team
-Build-Depends: debhelper (>= 10)
-Standards-Version: 4.1.0
+Build-Depends: debhelper (>= 12)
+Standards-Version: 4.3.0
 
 Package: libpam-mkhomedir-scibian
 Depends: libpam-python, acl

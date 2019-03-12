@@ -1,11 +1,5 @@
-libpam-mkhomedir-scibian (9.1edf1) scibian9; urgency=low
+libpam-mkhomedir-scibian (10.0) scibian10; urgency=medium
 
-  * Create /home/nni in /local01 
+  *  Initial release for Scibian10/Buster 
 
- -- Scibian Packaging Team <packaging@scibian.org>  Thu, 05 Apr 2018 14:05:39 +0200
-
-libpam-mkhomedir-scibian (9.0edf1) scibian9-edf; urgency=medium
-
-  * Final Scibian9 release
-
- -- Scibian Packaging Team <packaging@scibian.org>  Wed, 27 Sep 2017 11:38:29 +0200
+ -- Scibian Packaging Team <packaging@scibian.org>  Thu, 16 May 2019 16:53:46 +0200
