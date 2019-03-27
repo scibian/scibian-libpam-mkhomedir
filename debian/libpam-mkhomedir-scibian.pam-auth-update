@@ -3,4 +3,4 @@ Default: yes
 Priority: 128
 Session-Type: Additional
 Session:
-	required	pam_python.so	/usr/share/pam/pam_mkhomedir.py
+	required	pam_python.so	pam_mkhomedir.py

@@ -1,3 +1,38 @@
+scibian-libpam-mkhomedir (10.0sci4) scibian9; urgency=medium
+
+  * Add an explanation for scratch_dir in pam_mkhomedir.ini
+
+ -- Mehdi Dogguy <mehdi.dogguy@edf.fr>  Wed, 21 Nov 2018 14:00:33 +0100
+
+scibian-libpam-mkhomedir (10.0sci3) scibian9; urgency=medium
+
+  * Check existence of scratch_dir before proceeding with user directory creation
+  * Disable scratch_dir in provided defaults (pam_mkhomedir.ini)
+  * Fix a typo s/basedir/userdir/
+
+ -- Mehdi Dogguy <mehdi.dogguy@edf.fr>  Wed, 21 Nov 2018 13:51:06 +0100
+
+scibian-libpam-mkhomedir (10.0sci2) scibian9; urgency=medium
+
+  * Revert WIP changes pushed by mistake (for nfs4 acl support)
+  * Install PAM module in /lib/security, which is now the new PAM default
+    on Debian 9
+
+ -- Mehdi Dogguy <mehdi.dogguy@edf.fr>  Wed, 14 Nov 2018 11:08:28 +0100
+
+scibian-libpam-mkhomedir (10.0sci1) scibian9; urgency=medium
+
+  * Create /local01/home/user directory if necessary
+
+ -- Mehdi Dogguy <mehdi.dogguy@edf.fr>  Wed, 14 Nov 2018 11:08:28 +0100
+
+scibian-libpam-mkhomedir (0.5sci9) scibian9; urgency=medium
+
+  * Rebuild for Scibian 9.
+  * Fix maintainer
+
+ -- Rémi Palancher <remi-externe.palancher@edf.fr>  Tue, 15 May 2018 11:34:30 +0200
+
 scibian-libpam-mkhomedir (0.5) scibian8; urgency=medium
 
   * Bugfix: Change owner and mode of userdir only if it does not exists.
