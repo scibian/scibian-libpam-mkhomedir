@@ -1,2 +1,2 @@
-*.py lib/security
+*.py usr/share/pam
 *.ini etc
