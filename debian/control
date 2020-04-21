@@ -1,14 +1,13 @@
-Source: libpam-mkhomedir-calibre
-Section: edf
+Source: libpam-mkhomedir-scibian
+Section: scibian/edf
 Priority: optional
-Maintainer: TMI Calibre <tmi-calibre@edf.fr>
-Build-Depends: debhelper (>= 9), libpam0g-dev
-Standards-Version: 3.9.6
+Maintainer: Scibian Packaging Team
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.0
 
-Package: libpam-mkhomedir-calibre
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Package: libpam-mkhomedir-scibian
+Depends: libpam-python, acl
 Architecture: any
-Description: Module PAM de creation de repertoires Calibre
- Module PAM pour la creation automatique des repertoires
- /local00/$user, /local01/$user et /scratch/$user, ainsi
- que le parametrage des variables LOCALDIR et SCRATCHDIR
+Description: PAM module for creating Scibian directories
+ PAM module for automatically create Scibian directories
+ /local00/$user, and set the LOCALDIR variable

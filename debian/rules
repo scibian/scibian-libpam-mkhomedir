@@ -4,8 +4,6 @@
 
 override_dh_installdirs:
 	dh_installdirs
-	$(MAKE) install FAKEROOT=$(CURDIR)/debian/libpam-mkhomedir-calibre/
-	install -D -m 644 $(CURDIR)/debian/libpam-mkhomedir-calibre.pam-auth-update \
-		$(CURDIR)/debian/libpam-mkhomedir-calibre/usr/share/pam-configs/libpam-mkhomedir-calibre
+	install -D -m 644 $(CURDIR)/debian/libpam-mkhomedir-scibian.pam-auth-update \
+		$(CURDIR)/debian/libpam-mkhomedir-scibian/usr/share/pam-configs/libpam-mkhomedir-scibian
 
-override_dh_auto_install:

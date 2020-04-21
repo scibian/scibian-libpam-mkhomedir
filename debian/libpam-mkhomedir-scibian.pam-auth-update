@@ -3,4 +3,4 @@ Default: yes
 Priority: 192
 Session-Type: Additional
 Session:
-	required			pam_mkhomedir_calibre.so skel=/etc/skel/ umask=0077
+	required			pam_python.so pam_mkhomedir.py
