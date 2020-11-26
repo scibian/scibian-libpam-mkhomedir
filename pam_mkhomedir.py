@@ -40,6 +40,7 @@ home_dir=/home
 scratch_dir=
 skel_dir=/etc/skel
 debug_level=info
+overwrite=True
 acl=True
 acl_type=posix
 """
@@ -53,6 +54,7 @@ home_dir = config.get("config", "home_dir")
 scratch_dir = config.get("config", "scratch_dir")
 skel_dir = config.get("config", "skel_dir")
 debug_level = config.get("config", "debug_level")
+overwrite = config.getboolean("config", "overwrite")
 acl = config.getboolean("config", "acl")
 acl_type = config.get("config", "acl_type")
 if acl_type not in ['posix', 'nfs4']:
@@ -111,18 +113,21 @@ def create_user_dir(pamh, basedir, user, skel=False):
     maingid = pwd.getpwnam(user).pw_gid
 
     if exists(userdir):
-        if not os.path.isdir(userdir):
-            info("%s is not a dir, fixing it" % (userdir))
-            debug("-> unlink %s" % userdir)
-            os.unlink(userdir)
-            debug("<- unlink %s" % userdir)
-        elif acl:
-            if acl_type == 'posix':
-                if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
-                    error("Setting POSIX ACLs for user %s on %s failed!" % (user, userdir))
-            elif acl_type == 'nfs4':
-                if os.system("nfs4_setfacl -s A::%s@%s:%s %s" % (user, acl_nfs4_domain, acl_nfs4_perms, userdir)) != 0:
-                    error("Setting NFS4 ACLs for user %s on %s failed!" % (user, userdir))
+        if overwrite:
+            if not os.path.isdir(userdir):
+                info("%s is not a dir, fixing it" % (userdir))
+                debug("-> unlink %s" % userdir)
+                os.unlink(userdir)
+                debug("<- unlink %s" % userdir)
+            elif acl:
+                if acl_type == 'posix':
+                    if os.system("setfacl -m u:%s:rwx %s" % (user, userdir)) != 0:
+                        error("Setting POSIX ACLs for user %s on %s failed!" % (user, userdir))
+                elif acl_type == 'nfs4':
+                    if os.system("nfs4_setfacl -s A::%s@%s:%s %s" % (user, acl_nfs4_domain, acl_nfs4_perms, userdir)) != 0:
+                        error("Setting NFS4 ACLs for user %s on %s failed!" % (user, userdir))
+        else:
+            debug("skipping overwriting %s" % (userdir))
 
     if not exists(userdir):
         info("Creating %s" % userdir)
