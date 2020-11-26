@@ -1,3 +1,9 @@
+scibian-libpam-mkhomedir (0.7sci8) scibian8; urgency=medium
+
+  * Add possibility to not overwrite user directories
+
+ -- Rémi Palancher <remi-externe.palancher@edf.fr>  Thu, 26 Nov 2020 11:05:01 +0100
+
 scibian-libpam-mkhomedir (0.6sci8) scibian8; urgency=medium
 
   [ Mehdi Dogguy ]
