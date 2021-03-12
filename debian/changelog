@@ -1,3 +1,11 @@
+scibian-libpam-mkhomedir (10.1sci9) scibian9; urgency=medium
+
+  * Add default config logic using readfp()
+  * Add support for NFS4 ACL
+  * Add possibility to not overwrite user dirs
+
+ -- Rémi Palancher <remi-externe.palancher@edf.fr>  Fri, 12 Mar 2021 12:17:36 +0100
+
 scibian-libpam-mkhomedir (10.0sci4) scibian9; urgency=medium
 
   * Add an explanation for scratch_dir in pam_mkhomedir.ini
